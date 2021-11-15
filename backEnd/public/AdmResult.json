@@ -1,0 +1,16 @@
+[
+    {
+        "adid": 1002,
+        "adCompany": "腾讯",
+        "adName": "热销水果",
+        "category": "这也太棒了",
+        "src": "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+    },
+    {
+        "adid": 1003,
+        "adCompany": "字节",
+        "adName": "极品水果",
+        "category": "哇塞的水果",
+        "src": "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+    }
+]
