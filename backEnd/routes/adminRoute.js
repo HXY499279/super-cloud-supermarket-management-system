@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router();
-const { getToken } = require("../util")
-const AdminModel = require("../models/adminModel")
+const { getToken } = require("../middleware/index")
+const { AdminModel } = require("../models/index")
 
 router.post("/login", async (req, res) => {
   const admin = await AdminModel.findOne({
@@ -14,7 +14,7 @@ router.post("/login", async (req, res) => {
       token: getToken(admin)
     })
   } else {
-    res.status(401).send({ message: "无效的账号或者密码"})
+    res.status(401).send({ message: "无效的账号或者密码" })
   }
 })
 

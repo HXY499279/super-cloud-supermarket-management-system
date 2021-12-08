@@ -18,6 +18,7 @@
 
 .site-layout .site-layout-background {
   background: #fff !important;
+  position: relative !important;
 }
 
 #sider, #menu{
@@ -45,6 +46,19 @@
 }
 
 /* 公共样式 */
+/* 退出登录按钮样式 */
+#logout{
+  font-size: 20px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: all 0.5s;
+}
+#logout:hover{
+  color: #43a3fd;
+}
 /* 描述部分样式 */
 .descwraper{
   background-color: white;
@@ -54,6 +68,7 @@
 .contentWraper {
   margin: 20px 16px;
   min-height: 408PX;
+  position: relative;
 }
 /* 面包屑样式 */
 .bdc{

@@ -1,4 +1,7 @@
-const AdminModel = require("../models/adminModel")
-const UserModel = require("../models/userModel")
-
-module.exports = { AdminModel, UserModel }
+module.exports = {
+  AdminModel: require("./AdminModel"),
+  UserModel: require("./UserModel"),
+  AdModel: require("./AdModel"),
+  CategoryModel: require("./CategoryModel"),
+  CommodityModel: require("./CommodityModel")
+}

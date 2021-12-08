@@ -1,8 +1,8 @@
-#addCommodityForm{
-    min-height: 42vh !important;
-    background-color: white !important;
-    padding: 1vh 0 !important;
+#addCommodityForm {
+  min-height: 42vh !important;
+  background-color: white !important;
+  padding: 1vh 0 !important;
 }
-.input-number{
-    width: 100%;
+.input-number {
+  width: 100%;
 }
