@@ -1,0 +1,18 @@
+.search {
+  background-color: white;
+  padding: 0 3vh 3vh 3vh;
+}
+.CimInput {
+  width: auto;
+}
+.content-scroll {
+  /* margin-left: 10PX !important; */
+  height: 44vw !important;
+  overflow-y: scroll;
+}
+.spin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
