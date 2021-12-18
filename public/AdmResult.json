@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "6195b0bec8955ee9bcc10620",
+    "adName": "多汁葡萄柚",
+    "adCompany": "第一葡萄柚",
+    "adCategory": "水果",
+    "adFile": "x"
+  },
+  {
+    "_id": "6195b0bec8955ee9bcc10621",
+    "adName": "红富士苹果",
+    "adCompany": "富士山下",
+    "adCategory": "水果",
+    "adFile": "x"
+  },
+  {
+    "_id": "6195b0bec8955ee9bcc10622",
+    "adName": "长城葡萄酒",
+    "adCompany": "长城",
+    "adCategory": "酒",
+    "adFile": "x"
+  }
+]
