@@ -22,6 +22,7 @@ class UimChangePassword extends Component {
   }
 
   onFinish(predata, user) {
+    user = { ...user, ...predata }
     if (user.modifiedpassword === predata.userpwd) {
       message.warning('密码未修改！')
     } else {
@@ -34,21 +35,22 @@ class UimChangePassword extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.match.params._id, this.props)
-    this.setState({
-      user: this.props.user,
-    })
+    this.setState(
+      {
+        user_id: this.props.match.params._id,
+      },
+      () => {
+        httpUtil.getUser({ _id: this.state.user_id }).then((res) => {
+          this.setState({
+            user: res.user,
+          })
+        })
+      }
+    )
   }
 
   render() {
-    const {
-      user = {
-        _id: '',
-        useraccount: '',
-        userpwd: '',
-        name: '',
-      },
-    } = this.state
+    const { user } = this.state
     return (
       <div>
         <PageHeader
@@ -94,12 +96,11 @@ class UimChangePassword extends Component {
             <Input hidden />
             {user.useraccount}
           </Form.Item>
-          <Form.Item
-            label="用户密码"
-            name="modifiedpassword"
-            required={false}
-            initialValue={`${user.userpwd}`}
-          >
+          <Form.Item label="原密码" name="userpwd" required={false}>
+            <Input hidden />
+            {user.userpwd}
+          </Form.Item>
+          <Form.Item label="新密码" name="modifiedpassword" required={false}>
             <Input.Password />
           </Form.Item>
           <Form.Item {...tailLayout}>

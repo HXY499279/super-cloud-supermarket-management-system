@@ -37,7 +37,7 @@ export class Category extends Component {
       count: count,
     })
     let data = { count, pageSize }
-    httpUtil.getAllCategories(data).then((res) => {
+    httpUtil.getCategories(data).then((res) => {
       callback(res)
     })
   }
@@ -77,7 +77,6 @@ export class Category extends Component {
   }
 
   addCategory = () => {
-    // console.log(this.categoryInput.state.value)
     const count = this.state.count
     const pageSize = this.state.pageSize
     let categoryName = this.categoryInput.state.value
@@ -137,7 +136,6 @@ export class Category extends Component {
 
   componentDidMount() {
     this.fetchData((res) => {
-      console.log(res)
       this.setState({
         data: res.data,
         total: res.total,

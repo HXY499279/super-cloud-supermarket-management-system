@@ -1,25 +1,31 @@
-.ant-card-body{
-    padding: 0 10PX !important;
+.ant-card-body {
+  padding: 0 10px !important;
 }
-.detailWraper{
-    width:140PX;
-    height:90PX;
-    padding-left: 10PX;
-    display:inline-block;
-    overflow:hidden;
-    margin-top: 10PX;
+.detailWraper {
+  width: 140px;
+  height: 90px;
+  padding-left: 10px;
+  display: inline-block;
+  overflow: hidden;
+  margin-top: 10px;
 }
-.detail{
-    width: 139PX;
-    height: 21.818PX;
-    overflow: hidden !important;
-    /* text-overflow: ellipsis !important;
+.ant-card-cover > .ant-image {
+  margin: 0 auto !important;
+  margin-top: 5px !important;
+  display: block !important;
+}
+.detail {
+  width: 139px;
+  height: 21.818px;
+  overflow: hidden !important;
+  /* text-overflow: ellipsis !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 1 !important;
     -webkit-box-orient: vertical !important; */
 }
-.editInput{
-    display: inline-block;
-    width: 43PX;
-    height: 21PX;
+.editInput {
+  display: inline-block;
+  width: 43px;
+  height: 21px;
+  padding-left: 5px !important;
 }

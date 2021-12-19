@@ -27,21 +27,20 @@ const httpReq = (method, url, data) => {
         // 错误在这统一处理
         const status = err.response.status
         const errInfo = err.response.data.message
-        console.log(err.response)
         // 根据状态码做提示处理
         if (status === 401) {
-          message.error(`认证失败：${errInfo}`)
+          message.error(`认证失败: ${errInfo}`)
           return
         } else if (status === 403) {
-          message.error(`未授权：${errInfo}`)
+          message.error(`未授权: ${errInfo}`)
           setTimeout(() => {
             window.location.href = '/login'
           }, 1500)
           return
         } else if (status === 404) {
-          message.error(`未找到资源：${errInfo}`)
+          message.error(`未找到资源: ${errInfo}`)
         } else if (status === 500) {
-          message.error(`服务器未能处理：${errInfo ? errInfo : '服务器异常'}`)
+          message.error(`服务器未能处理: ${errInfo ? errInfo : '服务器异常'}`)
           return
         }
       }
@@ -54,19 +53,20 @@ class HttpUtil {
   login = (params) => httpReq('post', '/admins/login', params)
 
   // 用户模块
-  getAllUsers = (params) =>
+  getUsers = (params) =>
     httpReq('get', `/users/all-users/${params.current}/${params.pageSize}`)
+  getUser = (params) => httpReq('get', `/users/user/${params._id}`)
   updatePwd = (params) => httpReq('put', `/users/user`, params)
   deleteUser = (params) => httpReq('delete', `/users/user/${params._id}`)
 
   // 广告投放模块
-  getAllAds = () => httpReq('get', `/ads/all-ads`)
+  getAds = () => httpReq('get', `/ads/all-ads`)
   addAd = (params) => httpReq('post', '/ads/ad', params)
   updateAd = (params) => httpReq('put', `/ads/ad`, params)
   deleteAd = (params) => httpReq('delete', `/ads/ad/${params._id}`)
 
   // 商品类别模块
-  getAllCategories = (params) =>
+  getCategories = (params) =>
     httpReq(
       'get',
       `/categories/all-categories/${params.count}/${params.pageSize}`
@@ -76,10 +76,10 @@ class HttpUtil {
     httpReq('delete', `/categories/category/${params._id}/${params.curTotal}`)
 
   // 商品模块
-  getAllCommodities = (params) =>
+  getCommodities = (params) =>
     httpReq(
       'get',
-      `/commodities/all-commodities/${params.count}/${params.pageSize}`
+      `/commodities/all-commodities/?count=${params.count}&pageSize=${params.pageSize}&category_id=${params.category_id}&commodityName=${params.commodityName}&inventoryStatus=${params.inventoryStatus}&popularity=${params.popularity}`
     )
   addCommodity = (params) => httpReq('post', '/commodities/commodity', params)
   updateCommodity = (params) => httpReq('put', `/commodities/commodity`, params)
@@ -89,13 +89,17 @@ class HttpUtil {
       `/commodities/commodity/${params._id}/${params.curTotal}/${params.category_id}`
     )
 
-  getData = (params) => {
-    return httpReq('get', '/getData', params)
-  }
+  // 订单模块
+  getOrders = (params) =>
+    httpReq(
+      'get',
+      `/orders/all-orders/?current=${params.current}&pageSize=${params.pageSize}&status=${params.status}&_id=${params._id}&phone=${params.phone}&dateSta=${params.dateSta}&dateEnd=${params.dateEnd}`
+    )
+  updateOrder = (params) => httpReq('put', '/orders/order', params)
+  getRandomOrder = () => httpReq('get', '/orders/randomOrder')
 
-  showData = (params) => {
-    return httpReq('get', '/showData', params)
-  }
+  // dashboard模块
+  getDashboard = () => httpReq('get', `/dashboard`)
 }
 
 export default new HttpUtil()

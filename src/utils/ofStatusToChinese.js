@@ -1,7 +1,6 @@
 const ofStatusToChinese = (preArr) => {
   const arr = [...preArr]
   arr.forEach((item) => {
-    console.log(item.status)
     if (item.status === undefined) {
       switch (item.item) {
         case 'willDelivery':
@@ -29,7 +28,7 @@ const ofStatusToChinese = (preArr) => {
       }
     } else {
       switch (item.status) {
-        case 'willdelivery':
+        case 'willDelivery':
           item.status = '待发货'
           break
         case 'delivery':

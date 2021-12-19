@@ -17,11 +17,7 @@ export class Dashboard extends Component {
   }
 
   componentDidMount() {
-    reqwest({
-      url: '/dashboard/showdashboard',
-      type: 'json',
-      method: 'get',
-    }).then((res) => {
+    httpUtil.getDashboard().then((res) => {
       console.log(res)
       // 处理数据
       const ofDetail = {
@@ -51,7 +47,7 @@ export class Dashboard extends Component {
         res.success +
         res.refund +
         res.refunded
-      console.log(typeof ((res.willDelivery * 1.0) / totalof).toFixed(4))
+
       const ofSummary = [
         {
           item: 'willDelivery',
@@ -207,17 +203,19 @@ export class Dashboard extends Component {
             <Col span={4}>
               <Card
                 className="data-card"
-                title={`今日新增：${
+                title={`今日新增: ${
                   undefined === ofDetail ? 0 : ofDetail.sales.todaySale
                 }元`}
                 bordered
               >
                 <div className="dataCard">
-                  总销售额：
+                  总销售额:
                   <br />
                   <div className="Card_data">
                     {`${
-                      undefined === ofDetail ? 0 : ofDetail.sales.totalSales
+                      undefined === ofDetail
+                        ? 0
+                        : Math.ceil(ofDetail.sales.totalSales)
                     }`}
                     元
                   </div>
@@ -227,7 +225,7 @@ export class Dashboard extends Component {
             <Col span={4}>
               <Card title="待发货" bordered>
                 <div className="dataCard">
-                  累计数量：
+                  累计数量:
                   <br />
                   <div className="Card_data">
                     {`${
@@ -242,7 +240,7 @@ export class Dashboard extends Component {
             <Col span={4}>
               <Card title="配送中" bordered>
                 <div className="dataCard">
-                  累计数量：
+                  累计数量:
                   <br />
                   <div className="Card_data">
                     {`${
@@ -257,7 +255,7 @@ export class Dashboard extends Component {
             <Col span={4}>
               <Card title="待退款" bordered>
                 <div className="dataCard">
-                  累计数量：
+                  累计数量:
                   <br />
                   <div className="Card_data">
                     {`${
@@ -270,7 +268,7 @@ export class Dashboard extends Component {
             <Col span={4}>
               <Card title="已退款" bordered>
                 <div className="dataCard">
-                  累计数量：
+                  累计数量:
                   <br />
                   <div className="Card_data">
                     {`${
@@ -285,7 +283,7 @@ export class Dashboard extends Component {
             <Col span={4}>
               <Card title="已成交" bordered>
                 <div className="dataCard">
-                  累计数量：
+                  累计数量:
                   <br />
                   <div className="Card_data">
                     {`${

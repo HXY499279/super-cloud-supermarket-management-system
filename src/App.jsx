@@ -6,7 +6,7 @@ import { default as Home } from './pages/Home/Home'
 
 message.config({
   top: 50,
-  maxCount: 1,
+  maxCount: 3,
 })
 
 export default class App extends Component {

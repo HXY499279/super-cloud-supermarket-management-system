@@ -10,9 +10,10 @@ import {
   Upload,
 } from 'antd'
 import { nanoid } from 'nanoid'
-import axios from 'axios'
-import './index.css'
 import httpUtil from '../../../../../utils/httpUtil'
+import getStandardStr from '../../../../../utils/getStandardStr'
+import { withRouter } from 'react-router-dom'
+import './index.css'
 
 const layout = {
   labelCol: { span: 8 },
@@ -24,7 +25,7 @@ const tailLayout = {
 
 const { Option } = Select
 
-export default class CimAddCommodity extends Component {
+class CimAddCommodity extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -44,12 +45,9 @@ export default class CimAddCommodity extends Component {
   }
 
   onFinish = (data) => {
-    console.log(data)
     // 处理空格
-    data.commodityName = data.commodityName.toString().replace(/\s/, '')
-    data.sellingUnit = data.sellingUnit.toString().replace(/\s/, '')
-    data.inventoryStatus = 1
-    data.salesVolume = 0
+    data.commodityName = getStandardStr(data.commodityName)
+    data.sellingUnit = getStandardStr(data.sellingUnit)
     data.file = data.file.file
     let formData = new FormData()
     for (let [key, value] of Object.entries(data)) {
@@ -84,7 +82,7 @@ export default class CimAddCommodity extends Component {
 
   componentDidMount = () => {
     // 请求分类列表
-    httpUtil.getAllCategories({ count: 0, pageSize: 0 }).then((res) => {
+    httpUtil.getCategories({ count: 0, pageSize: 0 }).then((res) => {
       console.log(res)
       this.setState({
         subCategory: res.data,
@@ -98,7 +96,7 @@ export default class CimAddCommodity extends Component {
         <PageHeader
           className="site-page-header"
           onBack={() => {
-            window.location.href = '/home/cim'
+            this.props.history.goBack()
           }}
           subTitle="商品信息管理/新增商品"
           style={{ paddingLeft: 10, backgroundColor: 'white' }}
@@ -111,14 +109,6 @@ export default class CimAddCommodity extends Component {
           initialValues={{ remember: true }}
           onFinish={this.onFinish}
         >
-          <Form.Item hidden name="inventoryStatus">
-            <Input value="" />
-          </Form.Item>
-
-          <Form.Item hidden name="salesVolume">
-            <Input value="" />
-          </Form.Item>
-
           <Form.Item
             label="商品名称"
             name="commodityName"
@@ -218,3 +208,5 @@ export default class CimAddCommodity extends Component {
     )
   }
 }
+
+export default withRouter(CimAddCommodity)

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Card, Divider, Input, Popconfirm, Button, message, Image } from 'antd'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'
 import binaryArrToUrl from '../../../../../utils/binaryArrToUrl'
-import getPopularity from '../../../../../utils/getPopularity'
 import './index.css'
 import httpUtil from '../../../../../utils/httpUtil'
 
@@ -96,7 +95,7 @@ export default class CommodityCard extends Component {
             alt="图片出错"
             src={url}
             height={186}
-            width={307}
+            width={227}
             preview={false}
           />
         }
@@ -122,20 +121,26 @@ export default class CommodityCard extends Component {
             <CloseOutlined key="ellipsis" />
           </Popconfirm>,
         ]}
-        // loading={true}
       >
         <p
           style={{
             margin: '10PX 0 0 0 ',
             fontWeight: 900,
+            height: 29,
+            paddingLeft: 15,
+            paddingRight: 15,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
             fontSize: 18,
             textAlign: 'center',
           }}
+          title={item.commodityName}
         >
           {item.commodityName}
         </p>
         <div className="detailWraper">
-          <div className="detail">火爆: {getPopularity(item.salesVolume)}</div>
+          <div className="detail">火爆: {'😍'.repeat(item.popularity)}</div>
           <Divider style={{ margin: 0 }} />
           <div className="detail">
             现价: {this.propertyEdit('currentPrice')}元
