@@ -79,6 +79,9 @@
 .desc{
   background-color: white;
 }
+.desc .ant-descriptions-item{
+  padding-bottom: 5px !important;
+}
 /* 内容区滚动
 .content-scroll{
   height: 44vw !important;

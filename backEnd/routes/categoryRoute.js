@@ -10,8 +10,9 @@ router.get("/all-categories/:count/:pageSize", isAuth, async (req, res) => {
     limit: +pageSize,
     sort: { total: 1 }
   })
+  const total = await CategoryModel.find({}).count()
   if (categories) {
-    res.send({ data: categories, total: categories.length })
+    res.send({ data: categories, total})
   } else {
     res.status(500).send({ message: "商品分类获取失败" })
   }

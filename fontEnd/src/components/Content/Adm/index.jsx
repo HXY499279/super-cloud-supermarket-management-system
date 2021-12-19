@@ -39,14 +39,14 @@ export class Adm extends Component {
       httpUtil.updateAd(formData).then((res) => {
         console.log(res)
         message.success(res.message)
-        this.getAllAds()
+        this.getAds()
       })
     },
     maxCount: 1,
   }
 
-  getAllAds = () => {
-    httpUtil.getAllAds().then((res) => {
+  getAds = () => {
+    httpUtil.getAds().then((res) => {
       this.setState({
         ads: res,
       })
@@ -60,7 +60,7 @@ export class Adm extends Component {
       //根据返回的状态码status判断是否删除广告成功
       .then((res) => {
         console.log(res)
-        this.getAllAds()
+        this.getAds()
         message.success(res.message)
       })
   }
@@ -134,7 +134,7 @@ export class Adm extends Component {
   ]
 
   componentDidMount() {
-    this.getAllAds()
+    this.getAds()
   }
 
   render() {

@@ -2,7 +2,7 @@
 function getStandardStr(str) {
   let newStr = str
   newStr = newStr.replace(/\s/g, ',')
-  newStr = newStr.split(/[,，；;.。]/g)
+  newStr = newStr.split(/[,，；;.。'‘”"\\]/g)
   let string = ''
   newStr.forEach((item) => {
     if (item !== '') {

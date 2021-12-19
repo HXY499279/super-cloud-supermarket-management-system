@@ -23,6 +23,7 @@ import zh_CN from 'antd/lib/locale-provider/zh_CN'
 import 'moment/locale/zh-cn'
 // 引用工具
 import ofStatusToChinese from '../../../utils/ofStatusToChinese'
+import httpUtil from '../../../utils/httpUtil'
 
 const { RangePicker } = DatePicker
 
@@ -32,13 +33,14 @@ export class Om extends Component {
     this.state = {
       date: [],
       data: [],
+      searchData: {},
       pagination: {
         current: 1,
-        pageSize: 5,
+        pageSize: 6,
         total: '',
       },
       loading: false,
-      status: 'willdelivery',
+      status: 'willDelivery',
       ofDetails: [],
     }
   }
@@ -46,8 +48,8 @@ export class Om extends Component {
   // 根据状态来切换订单信息中订单状态的className来切换其颜色
   confirmStatus = () => {
     switch (this.state.status) {
-      case 'willdelivery':
-        return 'willdelivery'
+      case 'willDelivery':
+        return 'willDelivery'
       case 'delivery':
         return 'delivery'
       case 'success':
@@ -64,23 +66,20 @@ export class Om extends Component {
   getColumns = () => {
     let columns = [
       {
-        title: '订单id',
-        dataIndex: 'ofid',
-        key: 'ofid',
-        defaultSortOrder: 'ascend',
-        sorter: (a, b) => a.id - b.id,
+        title: '订单号',
+        dataIndex: '_id',
+        key: '_id',
       },
       {
-        title: '用户id',
-        dataIndex: 'uid',
-        key: 'uid',
+        title: '用户姓名',
+        dataIndex: 'name',
+        key: 'name',
       },
       {
-        title: '总价',
-        dataIndex: 'totalPrice',
-        key: 'totalPrice',
+        title: '用户电话',
+        dataIndex: 'phone',
+        key: 'phone',
       },
-
       {
         title: '下单时间',
         dataIndex: 'time',
@@ -100,9 +99,9 @@ export class Om extends Component {
       this.state.status !== 'success' && this.state.status !== 'refunded'
         ? {
             title: '操作',
-            dataIndex: 'ofid',
-            key: 'ofid',
-            render: (ofid) => {
+            dataIndex: '_id',
+            key: '_id',
+            render: (_id) => {
               return (
                 <>
                   <Button
@@ -113,7 +112,7 @@ export class Om extends Component {
                       title={`确定${this.changeOprationButtonWord(
                         this.state.status
                       )}吗?`}
-                      onConfirm={this.confirmChangeStatus.bind(this, ofid)}
+                      onConfirm={this.confirmChangeStatus.bind(this, _id)}
                       okText="确认"
                       cancelText="取消"
                     >
@@ -134,7 +133,7 @@ export class Om extends Component {
   // 更改操作按钮中的文字
   changeOprationButtonWord = (status) => {
     switch (status) {
-      case 'willdelivery':
+      case 'willDelivery':
         return '发货'
       case 'delivery':
         return '完成订单'
@@ -146,42 +145,37 @@ export class Om extends Component {
   }
 
   // 确认更改订单状态操作
-  confirmChangeStatus = (ofid) => {
+  confirmChangeStatus = (_id) => {
     let { current, pageSize } = this.state.pagination
     const data = {
-      ofid: ofid,
+      _id: _id,
+      status: this.state.status,
       current,
       pageSize,
-      startStatus: this.state.status,
       endStatus: this.confirmEndStatus(),
     }
-    reqwest({
-      // 后端接口
-      url: '/om/changeofstatus',
-      method: 'post',
-      type: 'json',
-      // 传递给后端的数据
-      data: data,
-    })
-      //根据返回的状态码status判断是否删除用户成功
-      .then((res) => {
-        console.log(res)
-        let data = res
-        ofStatusToChinese(data.results)
-        this.setState({
-          data: data.results,
-        })
-        if (res.status === 'success') {
-          message.success('处理成功')
-        } else {
-          message.error('处理失败')
-        }
+    httpUtil.updateOrder(data).then((res) => {
+      let data = res.data
+      console.log(data)
+      // 数据处理
+      data.forEach((item, i) => {
+        item.key = nanoid()
+        item.time = new Date(item.time).toLocaleString().replace(/\//gi, '-')
+        data[i] = { ...item, ...item.user }
+        delete data[i].user
       })
+      ofStatusToChinese(data)
+      console.log(data)
+      this.setState({
+        data: data,
+      })
+      message.success(res.message)
+    })
   }
   // 根据startStatus来判断endStatus
   confirmEndStatus = () => {
     switch (this.state.status) {
-      case 'willdelivery':
+      case 'willDelivery':
         return 'delivery'
       case 'delivery':
         return 'success'
@@ -204,111 +198,89 @@ export class Om extends Component {
 
   // 搜索操作
   OmSearch = () => {
-    console.log(this.state.date)
-    let [ofid, uid, dateSta, dateEnd, status] = [
-      this.ofidInput.value,
-      this.uidInput.state.value,
+    let [_id, phone, dateSta, dateEnd] = [
+      this._idInput.state.value,
+      this.phoneInput.state.value,
       this.state.date[0],
       this.state.date[1],
-      this.state.status,
     ]
-    dateSta = JSON.stringify(dateSta)
-    dateEnd = JSON.stringify(dateEnd)
-    const data = { ofid, uid, dateSta, dateEnd, status }
-    console.log(data)
-    reqwest({
-      url: '/om/searchorderform',
-      method: 'post',
-      type: 'json',
-      data: data,
-    }).then((data) => {
-      // 数据处理-给每条数据添加独立的key
-      if (data.total !== 0) {
-        console.log(data)
-        data.results.forEach((item) => {
-          item.key = nanoid()
-        })
-        ofStatusToChinese(data.results)
-        let pagination = this.state.pagination
-        pagination.total = data.total
-        this.setState({
-          data: data.results,
-          pagination,
-        })
-        message.success('查询成功')
-      } else {
-        message.error('查无订单')
+    const searchData = { _id, phone, dateSta, dateEnd }
+    this.setState({
+      searchData,
+    })
+    this.fetch(searchData, 'search')
+  }
+
+  getPaginationParams = (params) => ({
+    current: this.state.pagination.current,
+    pageSize: this.state.pagination.pageSize,
+    status: this.state.status,
+    ...params,
+  })
+
+  fetch = (params = {}, from) => {
+    this.setState({
+      loading: true,
+    })
+    httpUtil.getOrders(this.getPaginationParams(params)).then((res) => {
+      const data = res.data
+      // 数据处理
+      data.forEach((item, i) => {
+        item.key = nanoid()
+        item.time = new Date(item.time).toLocaleString().replace(/\//gi, '-')
+        data[i] = { ...item, ...item.user }
+        delete data[i].user
+      })
+      // 数据处理-将status从英文变成中文在页面显示
+      ofStatusToChinese(data)
+      const pagination = this.state.pagination
+      pagination.total = res.total
+      this.setState({
+        loading: false,
+        // 根据接口返回的数据源
+        data: data,
+        pagination,
+      })
+      if (from === 'search') {
+        message.success(res.message)
       }
     })
   }
 
   // 点击Table按钮 渲染组件
   handleTableChange = (pagination) => {
-    console.log(pagination)
     let { current, pageSize } = pagination
-    // console.log(pagination)
-    this.setState({
-      pagination: {
-        current,
-        pageSize,
-      },
-    })
-    this.fetch({
-      pagination,
-    })
-  }
-
-  getRandomuserParams = (params) => ({
-    current: params.pagination.current,
-    pageSize: params.pagination.pageSize,
-    status: this.state.status,
-  })
-
-  fetch = (params = {}) => {
-    this.setState({ loading: true })
-    reqwest({
-      // 后端接口
-      url: '/om/oflist',
-      method: 'post',
-      type: 'json',
-      // 传递给后端的数据
-      data: this.getRandomuserParams(params),
-    }).then((data) => {
-      // 数据处理-给每条数据添加独立的key
-      data.results.forEach((item) => {
-        item.key = nanoid()
-      })
-      // 数据处理-将status从英文变成中文在页面显示
-      console.log(data)
-      ofStatusToChinese(data.results)
-      this.setState({
-        loading: false,
-        // 根据接口返回的数据源
-        data: data.results,
-        pagination: {
-          ...params.pagination,
-          // 根据接口返回的总条数
-          total: data.total,
-        },
-      })
-    })
-  }
-
-  // 点击状态按钮切换渲染
-  changeStatusAndPost = (status) => {
-    const { pagination } = this.state
     this.setState(
       {
-        status: status,
+        pagination: {
+          current,
+          pageSize,
+        },
       },
       () => {
-        this.fetch({ pagination })
+        this.fetch(this.state.searchData)
       }
     )
   }
 
-  willdeliveryClick = () => {
-    this.changeStatusAndPost('willdelivery')
+  // 点击状态按钮切换渲染
+  changeStatusAndPost = (status) => {
+    const pagination = this.state.pagination
+    pagination.current = 1
+    this.setState(
+      {
+        pagination,
+        status: status,
+        searchData: {},
+      },
+      () => {
+        this.fetch()
+      }
+    )
+  }
+
+  willDeliveryClick = () => {
+    this.changeStatusAndPost('willDelivery')
   }
   deliveryClick = () => {
     this.changeStatusAndPost('delivery')
@@ -324,8 +296,9 @@ export class Om extends Component {
   }
 
   componentDidMount() {
-    const { pagination } = this.state
-    this.fetch({ pagination })
+    // 生成随机订单接口
+    // httpUtil.getRandomOrder()
+    this.fetch(this.state.searchData)
   }
 
   render() {
@@ -335,12 +308,6 @@ export class Om extends Component {
         <Divider style={{ margin: 0 }} />
         <div className="Om-head">
           <div className="Om-desc-wraper">
-            {/* <Breadcrumb className="bdc">
-                            <Breadcrumb.Item>
-                                <a href="/home">主页</a>
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item>订单信息管理</Breadcrumb.Item>
-                        </Breadcrumb> */}
             <Descriptions title="订单管理" className="desc">
               <Descriptions.Item>
                 展示订单信息，查询订单，查看订单状态，处理订单的发货，确认送达和同意退款
@@ -351,7 +318,7 @@ export class Om extends Component {
             <Space>
               <Button
                 className="status-button"
-                onClick={this.willdeliveryClick}
+                onClick={this.willDeliveryClick}
               >
                 待发货
               </Button>
@@ -374,22 +341,22 @@ export class Om extends Component {
           <Divider style={{ margin: 0 }} />
           <Space style={{ marginTop: 20 }} size={20}>
             <div>
-              订单id:
-              <InputNumber
-                name="Oid"
+              订单号:
+              <Input
+                name="_id"
                 className="Om-input"
                 ref={(elev) => {
-                  this.ofidInput = elev
+                  this._idInput = elev
                 }}
               />
             </div>
             <div>
-              用户id:
+              用户电话:
               <Input
                 name="commodity"
                 className="Om-input"
                 ref={(elev) => {
-                  this.uidInput = elev
+                  this.phoneInput = elev
                 }}
               />
             </div>
@@ -425,88 +392,32 @@ export class Om extends Component {
             onChange={this.handleTableChange}
             bordered={true}
             expandable={{
-              onExpand: (boo, item) => {
-                console.log(item, 222222222, this.state.ofDetails)
-                let tag = 1
-                this.state.ofDetails.forEach((detail) => {
-                  console.log(detail.user.uid, item.uid)
-                  if (detail.commodityDetails[0].ofid === item.ofid) {
-                    tag = 0
-                  }
-                })
-                if (tag) {
-                  let data = {
-                    ofid: item.ofid,
-                    uid: item.uid,
-                  }
-                  reqwest({
-                    url: '/om/ofdetails',
-                    method: 'post',
-                    type: 'json',
-                    data: data,
-                  }).then((res) => {
-                    console.log(res)
-                    res.commodityDetails.forEach((item) => {
-                      item.key = nanoid()
-                    })
-                    let ofDetails = this.state.ofDetails
-                    ofDetails.push(res)
-                    this.setState({
-                      ofDetails: ofDetails,
-                    })
-                  })
-                }
-              },
               expandedRowRender: (item) => {
-                console.log(item.uid)
-                console.log(this.state.ofDetails)
-                let tag = 0
-                let index
-                this.state.ofDetails.forEach((detail, ind) => {
-                  console.log(detail.user.uid, item.uid)
-                  if (detail.commodityDetails[0].ofid === item.ofid) {
-                    tag = 1
-                    index = ind
-                  }
-                })
-                if (tag) {
-                  if (
-                    this.state.ofDetails !== null &&
-                    this.state.ofDetails[index].user !== undefined &&
-                    this.state.ofDetails[index].commodityDetails !== undefined
-                  ) {
-                    const user = this.state.ofDetails[index].user
-                    const commodityDetails =
-                      this.state.ofDetails[index].commodityDetails
-                    return (
-                      <div className="sub-order">
-                        <p>
-                          用户收货地址: {user.address} {user.uname} {user.phone}{' '}
-                        </p>
-                        <p style={{ fontWeight: 600, fontSize: 14 }}>
-                          商品详情:
-                        </p>
-                        {commodityDetails.map((item) => {
-                          return (
-                            <div className="commodity-details">
-                              <div className="commodity-details-item">
-                                编号: {item.cid}
-                              </div>
-                              <div className="commodity-details-item">
-                                名称: {item.commodityName}
-                              </div>
-                              <div className="commodity-details-item">
-                                数量: {item.count}
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    )
-                  } else {
-                    return <Empty />
-                  }
-                }
+                const { address, name, phone, commodityDetails } = item
+                return (
+                  <div className="sub-order">
+                    <p>
+                      用户收货地址: {address} {name} {phone}{' '}
+                    </p>
+                    <p style={{ fontWeight: 600, fontSize: 14 }}>商品详情:</p>
+                    {commodityDetails.map((item) => {
+                      return (
+                        <div className="commodity-details">
+                          <div className="commodity-details-item">
+                            名称: {item.commodity.commodityName}
+                          </div>
+                          <div className="commodity-details-item">
+                            单价: {item.commodity.currentPrice}
+                          </div>
+                          <div className="commodity-details-item">
+                            数量: {item.count}
+                          </div>
+                        </div>
+                      )
+                    })}
+                    共计: <strong>{item.totalPrice}</strong> 元
+                  </div>
+                )
               },
             }}
           />

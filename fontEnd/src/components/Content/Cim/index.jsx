@@ -6,7 +6,6 @@ import {
   Button,
   Input,
   message,
-  InputNumber,
   Spin,
   Select,
   Col,
@@ -20,7 +19,6 @@ import InfiniteScroll from 'react-infinite-scroller'
 import { nanoid } from 'nanoid'
 import httpUtil from '../../../utils/httpUtil'
 import getStandardStr from '../../../utils/getStandardStr'
-import reqwest from 'reqwest'
 import CommodityCard from './components/CimCommodityCard'
 import CimAddCommodity from './components/CimAddCommodity'
 import './index.css'
@@ -34,24 +32,36 @@ export class Cim extends Component {
       data: [],
       subCategory: [],
       loading: false,
+      lazyLoading: true,
       hasMore: true,
-      total: '',
       isAddCategory: false,
       count: 0,
       pageSize: 8,
+      total: 0,
+      searchCondition: {
+        popularity: '',
+        commodityName: '',
+        category_id: '',
+        inventoryStatus: '',
+      },
     }
   }
 
   fetchData = async (callback) => {
-    let count = this.state.count
-    let pageSize = this.state.pageSize
-    count += 1
+    const count = this.state.count + 1
+    const pageSize = this.state.pageSize
+    const searchCondition = this.state.searchCondition
     this.setState({
       count: count,
     })
-    let data = { count, pageSize }
-    const res = await httpUtil.getAllCommodities(data)
-    console.log(res)
+    const res = await httpUtil.getCommodities({
+      ...searchCondition,
+      count,
+      pageSize,
+    })
+    this.setState({
+      lazyLoading: false,
+    })
     callback(res)
   }
 
@@ -60,7 +70,6 @@ export class Cim extends Component {
     this.setState({
       loading: true,
     })
-    console.log(this.state)
     if (data.length >= total) {
       message.warning('商品已展示完毕')
       this.setState({
@@ -84,7 +93,6 @@ export class Cim extends Component {
     const { _id, category_id } = item
     let curTotal = this.state.count * this.state.pageSize
     httpUtil.deleteCommodity({ _id, curTotal, category_id }).then((res) => {
-      console.log(res)
       this.setState({
         data: res.data,
       })
@@ -127,38 +135,40 @@ export class Cim extends Component {
       category_id,
       inventoryStatus,
     }
-    console.log(searchCondition)
-    reqwest({
-      url: '/searchcommodity',
-      method: 'post',
-      type: 'json',
-      data: searchCondition,
-    }).then((res) => {
-      console.log(res)
-      this.setState({
-        data: res.commodities,
-        total: res.total,
-      })
-      message.success(res.message)
-    })
+    this.setState(
+      {
+        count: 0,
+        total: 0,
+        searchCondition,
+        lazyLoading: true,
+      },
+      () => {
+        this.fetchData((res) => {
+          message.success(res.message)
+          this.setState({
+            data: res.data,
+            total: res.total,
+            loading: false,
+            hasMore: true,
+            lazyLoading: false,
+          })
+        })
+      }
+    )
   }
   // 获取下拉框的值
   inventoryStatusSelectChange = (e) => {
-    console.log(e)
     this.inventoryStatusSelect.value = e
   }
   popularitySelectChange = (e) => {
-    console.log(e)
     this.popularitySelect.value = e
   }
   categorySelectChange = (e) => {
-    console.log(e)
     this.categorySelect.value = e
   }
   // 渲染分类下拉框的选项
   showCategoryList = () => {
     return this.state.subCategory.map((item, index) => {
-      // console.log(item.category)
       return (
         <Option value={`${item._id}`} key={nanoid()}>
           {item.categoryName}
@@ -247,6 +257,7 @@ export class Cim extends Component {
         </div>
       )
     }
+
     return (
       <>
         <InfiniteScroll
@@ -259,11 +270,10 @@ export class Cim extends Component {
           <Demo />
           <div className="contentWraper">
             <div style={{ padding: 0 }}>
-              {/* {console.log(this.state.data)} */}
-              {undefined === this.state.data[0] ? (
-                <Empty style={{ paddingTop: 80 }}>
-                  <Spin size="large" className="spin" />
-                </Empty>
+              {this.state.lazyLoading ? (
+                <Spin size="large" className="spin" />
+              ) : undefined === this.state.data[0] ? (
+                <Empty style={{ paddingTop: 80 }} />
               ) : (
                 <Row gutter={10} className="">
                   {this.showCommodity(this.state.data)}
@@ -277,16 +287,14 @@ export class Cim extends Component {
   }
 
   componentDidMount = () => {
-    console.log('页面初始渲染')
     this.fetchData((res) => {
-      console.log(res)
       this.setState({
         data: res.data,
         total: res.total,
       })
     })
     // 请求分类列表
-    httpUtil.getAllCategories({ count: 0, pageSize: 0 }).then((res) => {
+    httpUtil.getCategories({ count: 0, pageSize: 0 }).then((res) => {
       this.setState({
         subCategory: res.data,
       })
@@ -303,12 +311,6 @@ export class Cim extends Component {
       >
         <Divider style={{ margin: 0 }} />
         <div className="descwraper">
-          {/* <Breadcrumb className="bdc">
-                            <Breadcrumb.Item>
-                            <a href="/home">主页</a>
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item>商品信息管理</Breadcrumb.Item>
-                        </Breadcrumb> */}
           <Descriptions title="商品管理" className="desc">
             <Descriptions.Item>
               仓库商品信息展示，可以进行新增商品，搜索商品，编辑商品，删除商品操作
@@ -318,7 +320,6 @@ export class Cim extends Component {
         <BrowserRouter>
           <Switch>
             <Route path="/home/cim/addcommodity" component={CimAddCommodity} />
-
             <Route path="/home/cim" component={this.showCommodityInit} />
           </Switch>
         </BrowserRouter>

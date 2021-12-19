@@ -146,8 +146,7 @@ export class Uim extends Component {
       current: params.pagination.current,
       pageSize: params.pagination.pageSize,
     }
-    httpUtil.getAllUsers(tableInfo).then((data) => {
-      console.log(data)
+    httpUtil.getUsers(tableInfo).then((data) => {
       this.setState({
         loading: false,
         // 根据接口返回的数据源
@@ -162,14 +161,14 @@ export class Uim extends Component {
 
   UimChangePasswordComponent = (props) => {
     const _id = props.match.params._id
-    let user = this.state.data.filter((item) => {
+    let user = this.state.data?.filter((item) => {
       if (item._id === _id) {
         return item
       } else {
         return 0
       }
     })
-    user = user[0]
+    user = user ? user[0] : {}
     return <UimChangePassword user={user} />
   }
 
@@ -185,12 +184,6 @@ export class Uim extends Component {
       <div>
         <Divider style={{ margin: 0 }} />
         <div className="descwraper">
-          {/* <Breadcrumb className="bdc">
-                        <Breadcrumb.Item>
-                        <a href="/home">主页</a>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>用户信息管理</Breadcrumb.Item>
-                    </Breadcrumb> */}
           <Descriptions title="用户列表" className="desc">
             <Descriptions.Item>
               用户信息展示，可进行用户密码修改和删除用户操作
