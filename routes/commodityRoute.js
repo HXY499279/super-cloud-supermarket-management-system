@@ -6,7 +6,7 @@ const urlib = require("url");
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId;
 
-// 获取所有的商品
+// 获取所有的商品(包含搜索)
 router.get("/all-commodities", isAuth, async (req, res) => {
   const data = urlib.parse(req.url, true);
   const { count, pageSize, category_id, commodityName, inventoryStatus, popularity, } = data.query
@@ -22,6 +22,8 @@ router.get("/all-commodities", isAuth, async (req, res) => {
       delete queryCondition[propName]
     }
   }
+  // 对商品名字进行模糊匹配
+  queryCondition.commodityName ? queryCondition.commodityName = new RegExp(`${queryCondition.commodityName}`, "ig") : 0
   // 将数据做类型转换
   queryCondition.category_id ? queryCondition.category_id = new ObjectId(category_id) : 0
   queryCondition.popularity ? queryCondition.popularity *= 1 : 0
@@ -100,6 +102,11 @@ router.put("/commodity", isAuth, async (req, res) => {
     return res.status(500).send({ message: "请输入正确的商品单位" })
   }
   try {
+    if (inventory <= danger_inventory) {
+      req.body.inventoryStatus = 0
+    } else {
+      req.body.inventoryStatus = 1
+    }
     const commodity = await CommodityModel.findByIdAndUpdate(_id, req.body)
     if (commodity) {
       return res.status(200).send({ message: "商品更改成功" })
@@ -107,7 +114,6 @@ router.put("/commodity", isAuth, async (req, res) => {
       return res.status(500).send({ message: "商品更改失败" })
     }
   } catch (error) {
-    console.log(error.kind, error.valueType);
     if (error.valueType !== error.kind) {
       return res.status(500).send({ message: "请输入正确类型的值" })
     }

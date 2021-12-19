@@ -11,7 +11,8 @@ const commoditySchema = new mongoose.Schema({
   },
   category_id: {
     type: mongoose.Schema.Types.ObjectId,
-    required: [true, "未选择商品分类"]
+    required: [true, "未选择商品分类"],
+    ref:"category"
   },
   cost: {
     type: Number,

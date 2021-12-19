@@ -1,5 +1,5 @@
 const express = require('express')
-const { adminRoute, userRoute, adRoute, categoryRoute, commodityRoute } = require('./routes/index')
+const { adminRoute, userRoute, adRoute, categoryRoute, commodityRoute, orderRoute, dashboardRoute } = require('./routes/index')
 const bodyParser = require('body-parser');
 const fileUpload = require('express-fileupload');
 const config = require('./config');
@@ -29,10 +29,11 @@ app.use('/api/users', userRoute);
 app.use('/api/ads', adRoute);
 app.use('/api/categories', categoryRoute);
 app.use('/api/commodities', commodityRoute);
+app.use('/api/orders', orderRoute);
+app.use('/api/dashboard', dashboardRoute);
 
 
 
-const port = 5001
-app.listen(port, function () {
-    console.log(`running in ${port}~`)
+app.listen(config.PORT, function () {
+    console.log(`running in ${config.PORT}~`)
 })

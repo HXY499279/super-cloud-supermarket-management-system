@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const userSchema = new mongoose.Schema({
   useraccount: {
-    type: Number,
+    type: String,
     required: [true, "未输入账号！"],
     min: 10,
     max: 10
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     required: [true, "未输入地址！"]
   },
   phone: {
-    type: Number,
+    type: String,
     validate: {
       validator: function (v) {
         return /^1[3-9][0-9]{9}$/.test(v);

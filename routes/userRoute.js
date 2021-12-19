@@ -23,6 +23,17 @@ router.get("/all-users/:current/:pageSize", isAuth, async (req, res) => {
   }
 })
 
+// 获取单个用户
+router.get("/user/:_id", isAuth, async (req, res) => {
+  const { _id } = req.params
+  const user = await UserModel.find({ _id })
+  if (user[0]) {
+    res.send({ user: user[0], message: "用户获取成功" })
+  } else {
+    res.status(500).send({ message: "用户获取失败" })
+  }
+})
+
 // 修改某个用户的密码
 router.put("/user", isAuth, async (req, res) => {
   const { _id, modifiedpassword } = req.body
