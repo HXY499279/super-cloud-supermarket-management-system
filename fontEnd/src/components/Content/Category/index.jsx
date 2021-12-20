@@ -148,12 +148,6 @@ export class Category extends Component {
       <div>
         <Divider style={{ margin: 0 }} />
         <div className="descwraper">
-          {/* <Breadcrumb className="bdc">
-                        <Breadcrumb.Item>
-                            <a href="/home">主页</a>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>商品分类管理</Breadcrumb.Item>
-                    </Breadcrumb> */}
           <Descriptions title="分类管理" className="desc">
             <Descriptions.Item>
               商品分类展示，新增分类，删除分类
@@ -233,13 +227,7 @@ export class Category extends Component {
                   </List.Item>
                 )}
                 loading={this.state.data ? false : true}
-              >
-                {this.state.loading && this.state.hasMore && (
-                  <div className="demo-loading-container">
-                    <Spin />
-                  </div>
-                )}
-              </List>
+              ></List>
             </InfiniteScroll>
           </div>
         </div>

@@ -8,6 +8,7 @@
   }
   .demo-loading-container {
     position: absolute;
+    top: 100px;
     bottom: 40px;
     width: 100%;
     text-align: center;
