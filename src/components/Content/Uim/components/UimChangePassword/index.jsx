@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Button, message, PageHeader } from 'antd'
+import { Form, Input, Button, message, PageHeader, Skeleton } from 'antd'
 import reqwest from 'reqwest'
 import { withRouter } from 'react-router-dom'
 import './index.css'
@@ -18,6 +18,7 @@ class UimChangePassword extends Component {
     super(props)
     this.state = {
       user: {},
+      loading: true,
     }
   }
 
@@ -43,6 +44,7 @@ class UimChangePassword extends Component {
         httpUtil.getUser({ _id: this.state.user_id }).then((res) => {
           this.setState({
             user: res.user,
+            loading: false,
           })
         })
       }
@@ -50,7 +52,7 @@ class UimChangePassword extends Component {
   }
 
   render() {
-    const { user } = this.state
+    const { user, loading } = this.state
     return (
       <div>
         <PageHeader
@@ -85,7 +87,15 @@ class UimChangePassword extends Component {
             initialValue={`${user.name}`}
           >
             <Input hidden />
-            {user.name}
+            {loading ? (
+              <Skeleton.Input
+                style={{ width: 200, borderRadius: 3 }}
+                active={true}
+                size="small"
+              />
+            ) : (
+              user.name
+            )}
           </Form.Item>
           <Form.Item
             label="用户账号"
@@ -94,11 +104,27 @@ class UimChangePassword extends Component {
             initialValue={`${user.useraccount}`}
           >
             <Input hidden />
-            {user.useraccount}
+            {loading ? (
+              <Skeleton.Input
+                style={{ width: 200, borderRadius: 3 }}
+                active={true}
+                size="small"
+              />
+            ) : (
+              user.useraccount
+            )}
           </Form.Item>
           <Form.Item label="原密码" name="userpwd" required={false}>
             <Input hidden />
-            {user.userpwd}
+            {loading ? (
+              <Skeleton.Input
+                style={{ width: 200, borderRadius: 3 }}
+                active={true}
+                size="small"
+              />
+            ) : (
+              user.userpwd
+            )}
           </Form.Item>
           <Form.Item label="新密码" name="modifiedpassword" required={false}>
             <Input.Password />
