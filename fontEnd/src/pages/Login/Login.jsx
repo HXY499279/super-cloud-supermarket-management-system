@@ -4,6 +4,7 @@ import 'antd/dist/antd.css'
 import './index.css'
 import httpUtil from '../../utils/httpUtil'
 import pic from '../../assets/2.jpg'
+import { Link } from 'react-router-dom'
 
 const layout = {
   labelCol: { span: 10 },
@@ -13,7 +14,7 @@ const tailLayout = {
   wrapperCol: { offset: 0, span: 10 },
 }
 
-export default class Login extends Component {
+export class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -25,8 +26,6 @@ export default class Login extends Component {
   }
 
   submitHandle = () => {
-    // console.log(this.nameElem.props.value)
-    // console.log(this.passwordElem.props.value)
     if (
       this.nameElem.props.value !== undefined &&
       this.passwordElem.props.value !== undefined
@@ -45,6 +44,7 @@ export default class Login extends Component {
               setTimeout(() => {
                 window.location.href = './home'
               }, 1000)
+              // 将session存在sessionStorage中
               sessionStorage.setItem('Token', res.token)
             }
           })
@@ -93,22 +93,33 @@ export default class Login extends Component {
             </Form.Item>
 
             <Form.Item {...tailLayout}>
-              <Button
-                type="primary"
-                htmlType="submit"
-                id="submit"
-                onClick={this.submitHandle}
-                style={{ borderRadius: 7 }}
-              >
-                登陆
-              </Button>
+              <div className="button-wrapper">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="login-button"
+                  onClick={this.submitHandle}
+                  style={{ borderRadius: 7 }}
+                >
+                  登陆
+                </Button>
+                <Link to="/register">
+                  <Button
+                    type="primary"
+                    className="login-button"
+                    style={{ borderRadius: 7 }}
+                  >
+                    注册
+                  </Button>
+                </Link>
+              </div>
             </Form.Item>
           </Form>
           <p className="login-p" style={{ color: 'white' }}>
-            CQUPT-Supermarket-Management-System
+            Super-CQUPT-Supermarket-Management-System
           </p>
           <p className="login-p" style={{ color: 'white' }}>
-            Designed By LTH
+            Designed By HXY
           </p>
         </div>
       </div>

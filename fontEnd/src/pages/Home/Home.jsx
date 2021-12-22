@@ -10,12 +10,11 @@ import {
 //导入组件
 import Routes from '../../utils/routes'
 import SideMenu from '../../components/Menu'
-import jwt from 'jsonwebtoken'
 import './index.css'
 
 const { Header, Sider } = Layout
 
-export default class Home extends Component {
+export class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {

@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import { message } from 'antd'
-import { default as Login } from './pages/Login/Login'
-import { default as Home } from './pages/Home/Home'
+import { Home, Login, Register } from './pages/index'
 
 message.config({
   top: 50,
@@ -16,6 +15,7 @@ export default class App extends Component {
         <BrowserRouter>
           <Switch>
             <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
             <Route path="/home" component={Home} />
             <Redirect path="/" to="/login" />
           </Switch>

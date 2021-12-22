@@ -18,4 +18,26 @@ router.post("/login", async (req, res) => {
   }
 })
 
+router.post("/register", async (req, res) => {
+  const findAdmin = await AdminModel.findOne({
+    adminaccount: req.body.adminaccount,
+  })
+  if (findAdmin) {
+    res.status(500).send({ message: "账号已存在，请直接登陆" })
+  } else {
+    const admin = await AdminModel.create({
+      adminaccount: req.body.adminaccount,
+      adminpwd: req.body.adminpwd,
+      name: req.body.name
+    })
+    if (admin) {
+      res.status(200).send({
+        message: "注册成功"
+      })
+    } else {
+      res.status(500).send({ message: "注册失败" })
+    }
+  }
+})
+
 module.exports = router

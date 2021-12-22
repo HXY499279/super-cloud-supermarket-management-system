@@ -8,13 +8,16 @@ import {
   FileTextOutlined,
   AccountBookOutlined,
 } from '@ant-design/icons'
-import { Menu } from 'antd'
+import { Menu, Badge } from 'antd'
+import { connect } from 'react-redux'
+import { changeAsync } from '../../redux/actions/count'
 
-export default class MeNu extends Component {
+class MeNu extends Component {
   constructor(props) {
     super(props)
     this.state = {
       current: 1,
+      badge: 0,
     }
   }
 
@@ -22,6 +25,10 @@ export default class MeNu extends Component {
     this.setState({
       current: e.key,
     })
+  }
+
+  componentDidMount() {
+    this.props.changeAsync()
   }
 
   render() {
@@ -46,7 +53,10 @@ export default class MeNu extends Component {
           <Link to="/home/category">商品分类管理</Link>
         </Menu.Item>
         <Menu.Item key="5" icon={<FileTextOutlined />}>
-          <Link to="/home/om">订单信息管理</Link>
+          <Link to="/home/om">
+            订单信息管理
+            <Badge count={this.props.count} offset={[5, -15]} />
+          </Link>
         </Menu.Item>
         <Menu.Item key="6" icon={<AccountBookOutlined />}>
           <Link to="/home/adm">广告投放管理</Link>
@@ -55,3 +65,6 @@ export default class MeNu extends Component {
     )
   }
 }
+export default connect((state) => ({ count: state.count }), {
+  changeAsync,
+})(MeNu)

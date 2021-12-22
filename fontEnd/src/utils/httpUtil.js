@@ -28,20 +28,28 @@ const httpReq = (method, url, data) => {
         const status = err.response.status
         const errInfo = err.response.data.message
         // 根据状态码做提示处理
-        if (status === 401) {
-          message.error(`认证失败: ${errInfo}`)
-          return
-        } else if (status === 403) {
-          message.error(`未授权: ${errInfo}`)
-          setTimeout(() => {
-            window.location.href = '/login'
-          }, 1500)
-          return
-        } else if (status === 404) {
-          message.error(`未找到资源: ${errInfo}`)
-        } else if (status === 500) {
-          message.error(`服务器未能处理: ${errInfo ? errInfo : '服务器异常'}`)
-          return
+        switch (status) {
+          case 401:
+            message.error(`认证失败: ${errInfo}`)
+            break
+          case 403:
+            message.error(`未授权: ${errInfo}`)
+            setTimeout(() => {
+              window.location.href = '/login'
+            }, 1500)
+            break
+          case 404:
+            message.error(`未找到资源: ${errInfo}`)
+            break
+          case 500:
+            if (errInfo) {
+              message.warning(`服务器未能处理: ${errInfo}`)
+            } else {
+              message.error(`服务器未能处理: 服务器异常 `)
+            }
+            break
+          default:
+            break
         }
       }
     )
@@ -51,6 +59,7 @@ const httpReq = (method, url, data) => {
 class HttpUtil {
   // 管理员账户登陆模块
   login = (params) => httpReq('post', '/admins/login', params)
+  register = (params) => httpReq('post', '/admins/register', params)
 
   // 用户模块
   getUsers = (params) =>
