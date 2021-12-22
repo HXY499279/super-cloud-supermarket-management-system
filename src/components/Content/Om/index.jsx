@@ -15,7 +15,8 @@ import {
   Empty,
 } from 'antd'
 import { nanoid } from 'nanoid'
-import reqwest from 'reqwest'
+import { connect } from 'react-redux'
+import { changeAsync } from '../../../redux/actions/count'
 import { SearchOutlined } from '@ant-design/icons'
 import './index.css'
 // 配置中文环境
@@ -27,7 +28,7 @@ import httpUtil from '../../../utils/httpUtil'
 
 const { RangePicker } = DatePicker
 
-export class Om extends Component {
+class OmChildren extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -170,6 +171,7 @@ export class Om extends Component {
         data: data,
       })
       message.success(res.message)
+      this.props.changeAsync()
     })
   }
   // 根据startStatus来判断endStatus
@@ -426,3 +428,7 @@ export class Om extends Component {
     )
   }
 }
+
+export const Om = connect((state) => ({ count: state.count }), {
+  changeAsync,
+})(OmChildren)
