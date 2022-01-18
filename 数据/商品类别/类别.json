@@ -1,0 +1,36 @@
+[{
+  "_id": {
+    "$oid": "61be83247cc7820d95693910"
+  },
+  "categoryName": "饮品",
+  "total": 10,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61be887b7cc7820d95693943"
+  },
+  "categoryName": "日用品",
+  "total": 8,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61be88817cc7820d95693946"
+  },
+  "categoryName": "代餐品",
+  "total": 6,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61be88847cc7820d95693949"
+  },
+  "categoryName": "水果",
+  "total": 10,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "61be88897cc7820d9569394c"
+  },
+  "categoryName": "休闲零食",
+  "total": 6,
+  "__v": 0
+}]

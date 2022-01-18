@@ -31,7 +31,7 @@ router.post("/register", async (req, res) => {
       name: req.body.name
     })
     if (admin) {
-      res.status(200).send({
+      res.status(204).send({
         message: "注册成功"
       })
     } else {

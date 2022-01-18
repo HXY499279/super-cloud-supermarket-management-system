@@ -86,7 +86,7 @@ router.post("/commodity", isAuth, withPicFile, async (req, res) => {
         $inc: { total: 1 }
       }
     )
-    return res.status(200).send({ message: "商品新增成功" })
+    return res.status(201).send({ message: "商品新增成功" })
   } else {
     return res.status(500).send({ message: "商品新增失败" })
   }

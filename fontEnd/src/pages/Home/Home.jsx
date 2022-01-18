@@ -33,7 +33,7 @@ export class Home extends Component {
   }
 
   logout = () => {
-    sessionStorage.removeItem('Token')
+    localStorage.removeItem('Token')
     window.location.href = '/login'
   }
 
@@ -96,7 +96,7 @@ export class Home extends Component {
 
   componentDidMount() {
     // 配合退出登陆的删除Token，如果没有Token访问Home页面，就跳转到登陆页面
-    if (!sessionStorage.getItem('Token')) {
+    if (!localStorage.getItem('Token')) {
       window.location.href = '/login'
     }
   }

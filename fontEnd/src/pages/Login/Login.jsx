@@ -44,12 +44,18 @@ export class Login extends Component {
               setTimeout(() => {
                 window.location.href = './home'
               }, 1000)
-              // 将session存在sessionStorage中
-              sessionStorage.setItem('Token', res.token)
+              // 将session存在localStorage中
+              localStorage.setItem('Token', res.token)
             }
           })
         }
       )
+    }
+  }
+
+  componentDidMount(){
+    if(localStorage.getItem('Token')){
+      window.location.href = './home'
     }
   }
 

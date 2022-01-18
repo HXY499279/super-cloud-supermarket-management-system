@@ -4,7 +4,7 @@ import { message } from 'antd'
 const instance = axios.create({
   baseURL: '/api',
   headers: {
-    Authorization: sessionStorage.getItem('Token') || null,
+    Authorization: localStorage.getItem('Token') || null,
   },
 })
 // 添加返回拦截器，直接获取返回内容的data
@@ -18,7 +18,6 @@ const httpReq = (method, url, data) => {
       method: method,
       url: url,
       data: data,
-      // headers: config
     }).then(
       (data) => {
         resolve(data)
