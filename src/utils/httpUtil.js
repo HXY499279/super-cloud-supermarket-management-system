@@ -25,8 +25,8 @@ const httpReq = (method, url, data) => {
       },
       (err) => {
         // 错误在这统一处理
-        const status = err.response.status
-        const errInfo = err.response.data.message
+        const status = err?.response?.status
+        const errInfo = err?.response?.data?.message
         // 根据状态码做提示处理
         switch (status) {
           case 401:
