@@ -2,7 +2,7 @@
   "name": "cloud-supermarket-management-system",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://101.43.146.27:8081",
+  "homepage": "./",
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
     "@antv/g2": "^4.1.18",

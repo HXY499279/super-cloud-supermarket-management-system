@@ -191,24 +191,22 @@ export class Uim extends Component {
           </Descriptions>
         </div>
         <div className="contentWraper">
-          <BrowserRouter>
-            <Switch>
-              <Route
-                path="/home/uim/changepassword/:_id?"
-                component={this.UimChangePasswordComponent}
+          <Switch>
+            <Route
+              path="/home/uim/changepassword/:_id?"
+              component={this.UimChangePasswordComponent}
+            />
+            <Route path="/home/uim">
+              <Table
+                columns={this.columns}
+                rowKey={'_id'}
+                dataSource={data}
+                pagination={pagination}
+                loading={data ? false : true}
+                onChange={this.handleTableChange}
               />
-              <Route path="/home/uim">
-                <Table
-                  columns={this.columns}
-                  rowKey={'_id'}
-                  dataSource={data}
-                  pagination={pagination}
-                  loading={data ? false : true}
-                  onChange={this.handleTableChange}
-                />
-              </Route>
-            </Switch>
-          </BrowserRouter>
+            </Route>
+          </Switch>
         </div>
         <Modal
           title="确认删除操作"

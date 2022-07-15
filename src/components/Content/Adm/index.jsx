@@ -141,58 +141,50 @@ export class Adm extends Component {
     const adNumber = this.state.ads?.length
     return (
       <div>
-        <BrowserRouter>
+        <Divider style={{ margin: 0 }} />
+        <div className="descwraper">
+          <Descriptions title="广告管理" className="desc">
+            <Descriptions.Item>
+              广告信息展示，可以进行新增广告，更改广告，删除广告操作。注意：最多只允许
+              {AD_NUMBER}个广告位
+            </Descriptions.Item>
+          </Descriptions>
           <Divider style={{ margin: 0 }} />
-          <div className="descwraper">
-            {/* <Breadcrumb className="bdc">
-                            <Breadcrumb.Item>
-                                <a href="/home">主页</a>
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item>广告投放管理</Breadcrumb.Item>
-                        </Breadcrumb> */}
-            <Descriptions title="广告管理" className="desc">
-              <Descriptions.Item>
-                广告信息展示，可以进行新增广告，更改广告，删除广告操作。注意：最多只允许
-                {AD_NUMBER}个广告位
-              </Descriptions.Item>
-            </Descriptions>
-            <Divider style={{ margin: 0 }} />
-            {this.state.ads?.length >= AD_NUMBER ? (
-              <Button
-                type="primary"
-                style={{ marginBottom: 10, marginTop: 10, borderRadius: 5 }}
-                danger
-              >
-                广告位已达{AD_NUMBER}位
-              </Button>
-            ) : (
-              <Button
-                type="primary"
-                style={{ marginBottom: 10, marginTop: 10, borderRadius: 5 }}
-              >
-                <Link to={`/home/adm/addad/${adNumber}`}>新增广告</Link>
-              </Button>
-            )}
-          </div>
-          <div className="contentWraper">
-            <Switch>
-              <Route
-                exact
-                path="/home/adm/addad/:adNumber"
-                component={AdmAddAd.bind(this)}
+          {this.state.ads?.length >= AD_NUMBER ? (
+            <Button
+              type="primary"
+              style={{ marginBottom: 10, marginTop: 10, borderRadius: 5 }}
+              danger
+            >
+              广告位已达{AD_NUMBER}位
+            </Button>
+          ) : (
+            <Button
+              type="primary"
+              style={{ marginBottom: 10, marginTop: 10, borderRadius: 5 }}
+            >
+              <Link to={`/home/adm/addad/${adNumber}`}>新增广告</Link>
+            </Button>
+          )}
+        </div>
+        <div className="contentWraper">
+          <Switch>
+            <Route
+              exact
+              path="/home/adm/addad/:adNumber"
+              component={AdmAddAd.bind(this)}
+            />
+            <Route path="/home/adm">
+              <Table
+                columns={this.columns}
+                dataSource={this.state.ads}
+                pagination={false}
+                rowKey="_id"
+                loading={this.state.ads ? false : true}
               />
-              <Route path="/home/adm">
-                <Table
-                  columns={this.columns}
-                  dataSource={this.state.ads}
-                  pagination={false}
-                  rowKey="_id"
-                  loading={this.state.ads ? false : true}
-                />
-              </Route>
-            </Switch>
-          </div>
-        </BrowserRouter>
+            </Route>
+          </Switch>
+        </div>
       </div>
     )
   }

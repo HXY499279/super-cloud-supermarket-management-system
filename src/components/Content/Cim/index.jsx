@@ -317,12 +317,10 @@ export class Cim extends Component {
             </Descriptions.Item>
           </Descriptions>
         </div>
-        <BrowserRouter>
-          <Switch>
-            <Route path="/home/cim/addcommodity" component={CimAddCommodity} />
-            <Route path="/home/cim" component={this.showCommodityInit} />
-          </Switch>
-        </BrowserRouter>
+        <Switch>
+          <Route path="/home/cim/addcommodity" component={CimAddCommodity} />
+          <Route path="/home/cim" component={this.showCommodityInit} />
+        </Switch>
       </div>
     )
   }

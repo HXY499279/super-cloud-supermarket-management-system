@@ -103,12 +103,10 @@ export class Home extends Component {
 
   render() {
     return (
-      <BrowserRouter>
-        <Layout>
-          {this.showSider()}
-          {this.showContent()}
-        </Layout>
-      </BrowserRouter>
+      <Layout>
+        {this.showSider()}
+        {this.showContent()}
+      </Layout>
     )
   }
 }
