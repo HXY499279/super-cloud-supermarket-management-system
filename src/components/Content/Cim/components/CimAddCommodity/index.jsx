@@ -56,7 +56,7 @@ class CimAddCommodity extends Component {
     httpUtil.addCommodity(formData).then((res) => {
       console.log(res)
       message.success('商品添加成功！')
-      window.location.href = '/home/cim'
+      window.location.href = '/#/home/cim'
     })
   }
 

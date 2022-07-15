@@ -2,8 +2,8 @@ import axios from 'axios'
 import { message } from 'antd'
 // 给请求地址前加一个"/api"，在请求头中添加Token
 const instance = axios.create({
-  baseURL: 'http://101.43.146.27:8081/api',
-  // baseURL: 'http://localhost:8081/api',
+  // baseURL: 'http://101.43.146.27:8081/api',
+  baseURL: 'http://localhost:8081/api',
 })
 // 添加返回拦截器，直接获取返回内容的data
 instance.interceptors.response.use((res) => {
