@@ -2,6 +2,7 @@
   "name": "cloud-supermarket-management-system",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://101.43.146.27:8081",
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
     "@antv/g2": "^4.1.18",
@@ -41,7 +42,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5001",
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
