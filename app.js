@@ -15,7 +15,6 @@ mongoose.connection.once("open", function () {
 const app = express();
 // 使用中间件
 app.use(fileUpload());
-app.engine('html', require('express-art-template'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 //全局错误处理中间件
