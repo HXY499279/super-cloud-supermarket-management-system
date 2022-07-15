@@ -18,7 +18,6 @@ export class Dashboard extends Component {
 
   componentDidMount() {
     httpUtil.getDashboard().then((res) => {
-      console.log(res)
       // 处理数据
       const ofDetail = {
         sales: {

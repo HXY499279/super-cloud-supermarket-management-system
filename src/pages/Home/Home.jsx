@@ -29,7 +29,7 @@ export class Home extends Component {
   }
 
   logoClick = () => {
-    window.location.href = 'http://localhost:3000/home'
+    window.location.href = '/'
   }
 
   logout = () => {
@@ -97,7 +97,7 @@ export class Home extends Component {
   componentDidMount() {
     // 配合退出登陆的删除Token，如果没有Token访问Home页面，就跳转到登陆页面
     if (!sessionStorage.getItem('Token')) {
-      window.location.href = '/login'
+      window.location.href = '/'
     }
   }
 

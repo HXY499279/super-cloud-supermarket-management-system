@@ -4,9 +4,6 @@ import { message } from 'antd'
 const instance = axios.create({
   baseURL: 'http://101.43.146.27:8081/api',
   // baseURL: 'http://localhost:8081/api',
-  headers: {
-    Authorization: sessionStorage.getItem('Token') || null,
-  },
 })
 // 添加返回拦截器，直接获取返回内容的data
 instance.interceptors.response.use((res) => {
@@ -19,7 +16,9 @@ const httpReq = (method, url, data) => {
       method: method,
       url: url,
       data: data,
-      // headers: config
+      headers: {
+        Authorization: sessionStorage.getItem('Token') || null,
+      },
     }).then(
       (data) => {
         resolve(data)
@@ -36,7 +35,7 @@ const httpReq = (method, url, data) => {
           case 403:
             message.error(`未授权: ${errInfo}`)
             setTimeout(() => {
-              window.location.href = '/login'
+              window.location.href = '/'
             }, 1500)
             break
           case 404:

@@ -41,11 +41,11 @@ export class Login extends Component {
           httpUtil.login(this.state.admin).then((res) => {
             if (res) {
               message.success(`尊敬的<${res.name}>管理员，欢迎您`)
+              // 将session存在sessionStorage中
+              sessionStorage.setItem('Token', res.token)
               setTimeout(() => {
                 window.location.href = '/#/home'
               }, 1000)
-              // 将session存在sessionStorage中
-              sessionStorage.setItem('Token', res.token)
             }
           })
         }
