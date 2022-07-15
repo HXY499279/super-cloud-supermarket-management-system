@@ -28,7 +28,7 @@ router.post("/category", isAuth, async (req, res) => {
     limit: curTotal
   })
   if (category) {
-    res.send({ data: categories, message: "商品分类新增成功" })
+    res.status(201).send({ data: categories, message: "商品分类新增成功" })
   } else {
     res.status(500).send({ message: "商品分类新增失败" })
   }

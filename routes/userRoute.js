@@ -3,7 +3,7 @@ const router = express.Router();
 const { isAuth } = require("../middleware/index")
 const { UserModel } = require("../models/index")
 
-// 获取所有的用户
+// 获取用户
 router.get("/all-users/:current/:pageSize", isAuth, async (req, res) => {
   const { current, pageSize } = req.params
   const users = await UserModel.find({}, null, {
@@ -14,9 +14,9 @@ router.get("/all-users/:current/:pageSize", isAuth, async (req, res) => {
   if (users) {
     if (users.length) {
       const total = await UserModel.find({}).count()
-      res.send({ users, total })
+      res.status(206).send({ users, total })
     } else {
-      res.send({ users, total: 0 })
+      res.status(206).send({ users, total: 0 })
     }
   } else {
     res.status(500).send({ message: "用户获取失败" })

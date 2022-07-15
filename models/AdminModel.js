@@ -9,7 +9,6 @@ const adminSchema = new mongoose.Schema({
   adminpwd: {
     type: String,
     required: true,
-    default: "123",
     min: 5,
     max: 18
   },

@@ -112,7 +112,7 @@ router.get("/all-orders", isAuth, async (req, res) => {
     )
 
     if (orders) {
-      res.send({ data: orders, total, message: "订单获取成功" })
+      res.status(206).send({ data: orders, total, message: "订单获取成功" })
     } else {
       res.status(500).send({ message: "订单获取失败" })
     }

@@ -18,7 +18,7 @@ router.post("/ad", isAuth, withPicFile, async (req, res) => {
   const newAd = req.body
   const ad = await AdModel.create(newAd)
   if (ad) {
-    return res.status(200).send({ message: "广告新增成功" })
+    return res.status(201).send({ message: "广告新增成功" })
   } else {
     return res.status(500).send({ message: "广告新增失败" })
   }
