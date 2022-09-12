@@ -25,6 +25,12 @@ app.use(function (err, req, res, next) {
 });
 
 app.use("*", cors())
+// app.all("*", (req, res, next) => {
+//     res.header("Access-Control-Allow-Origin", "https://jwzx.cqupt.edu.cn");
+//     res.header("Access-Control-Allow-Private-Network", "true")
+//     res.header("Access-Control-Allow-Credentials", "true"); 
+//     next();
+// });
 
 app.use('/public/', express.static('./public/'))
 app.use('/api/admins', adminRoute);

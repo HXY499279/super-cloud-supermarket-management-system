@@ -158,7 +158,7 @@ router.delete("/commodity/:_id/:curTotal/:category_id", isAuth, async (req, res)
     },
   ])
   if (commodity) {
-    const category = await CategoryModel.findByIdAndUpdate(
+    await CategoryModel.findByIdAndUpdate(
       {
         _id: category_id
       },
